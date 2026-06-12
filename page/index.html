@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SahabatPetani AI - AI untuk Petani Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+    <div class="site">
+        <header class="flex items-center justify-between" style="margin-bottom:18px;">
+            <a href="#" class="logo">
+                <img src="../assets/logo.png" alt="SahabatPetani AI Logo" class="logo-img">
+                <span class="logo-text">SahabatPetani AI</span>
+            </a>
+            <nav class="hidden md:flex items-center space-x-6 text-sm">
+                <a href="#fitur" class="muted">Fitur</a>
+                <a href="#tentang" class="muted">Tentang</a>
+            </nav>
+        </header>
+
+        <main class="hero">
+            <section>
+                <h1 class="section-title">AI untuk Petani — Solusi Deteksi Cepat</h1>
+                <p class="muted">Unggah foto tanaman Anda. Sistem akan menganalisis gambar — disini hanya tampilan UI (tanpa logika AI).</p>
+                <div style="margin-top:18px;">
+                    <button class="btn-primary" id="tryBtn">Unggah Foto</button>
+                    <span style="margin-left:12px; color:#6b7280; font-size:0.95rem">Gambar untuk pratinjau sebelum analisis</span>
+                </div>
+            </section>
+
+            <aside>
+                <div class="upload-card">
+                    <div class="upload-input">
+                        <input type="file" id="fileInput" accept="image/*" style="display:none">
+                        <div id="dropZone" class="muted">
+                            <svg style="width:36px; height:36px; opacity:0.5; margin:0 auto 4px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                                <circle cx="12" cy="13" r="4"/>
+                            </svg>
+                            Klik atau seret gambar di sini
+                        </div>
+                    </div>
+                    <img id="preview" class="upload-preview" alt="Preview" src="" style="display:none">
+                    <div id="fileInfo" class="muted" style="width:100%; text-align:left; display:none; font-size:0.9rem"></div>
+                    <div id="actions" style="width:100%; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+                        <button id="clearBtn" type="button" class="btn-secondary" style="display:none">Hapus</button>
+                        <button id="submitBtn" type="button" class="btn-primary" style="display:none">Kirim ke AI</button>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Tombol Buka Kamera -->
+        <div style="margin-top:20px; text-align:center;">
+            <button id="cameraBtn" type="button" class="btn-primary" style="display:inline-flex; align-items:center; gap:6px;">
+                <svg style="width:18px; height:18px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                </svg>
+                Buka Kamera
+            </button>
+        </div>
+
+        <!-- Camera Modal (Floating Window) -->
+        <div id="cameraModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Buka Kamera</h3>
+                    <button id="closeModal" data-close="camera" type="button" class="close-btn" onclick="document.getElementById('cameraModal').style.display='none'; if(window.closeCamera) closeCamera();">✕</button>
+                </div>
+                <div class="modal-body">
+                    <video id="videoStream" autoplay playsinline></video>
+                    <canvas id="captureCanvas" style="display:none;"></canvas>
+                </div>
+                <div class="modal-footer">
+                    <button id="captureBtn" type="button" class="btn-primary" style="padding:6px 10px; font-size:0.9rem;">Ambil Foto</button>
+                    <button id="stopCameraBtn" type="button" class="btn-secondary" style="padding:6px 10px; font-size:0.9rem;">Tutup</button>
+                </div>
+            </div>
+        </div>
+
+        <section id="about" class="about-section">
+            <h2 class="about-title">Tentang SahabatPetani AI</h2>
+            <p class="about-description">SahabatPetani AI adalah alat bantu antarmuka yang dirancang untuk membantu petani mengenali masalah tanaman lebih cepat. Di sini kami menyediakan antarmuka unggah gambar yang memudahkan pengguna untuk mendapatkan analisis secara cepat. Versi ini hanya demo UI — tidak melakukan analisis nyata.</p>
+            
+            <div class="feature-cards">
+                <article class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
+                            <path d="M12 5v14M12 5l-4 4m4-4l4 4"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-card-title">Tujuan</h3>
+                    <p class="feature-card-text">Mempercepat identifikasi penyakit tanaman dan membantu keputusan bercocok tanam.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 12h18M12 5l7 7-7 7M3 5l7 7-7 7"/>
+                            <circle cx="12" cy="12" r="9" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-card-title">Cara kerja</h3>
+                    <p class="feature-card-text">Unggah foto, pratinjau tampil, lalu kirim ke sistem — simulasi untuk demo.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-card-title">Privasi</h3>
+                    <p class="feature-card-text">Semua gambar dihapus secara lokal setelah penggunaan pada demo ini — implementasi nyata harus menambahkan kebijakan privasi dan penyimpanan aman.</p>
+                </article>
+            </div>
+        </section>
+
+        <footer style="margin-top:28px; color:#6b7280; font-size:0.9rem">© <span id="year"></span> SahabatPetani AI. Semua hak dilindungi.</footer>
+    </div>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
